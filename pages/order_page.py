@@ -8,7 +8,7 @@ from pages.base_page import BasePage
 from locators.base_locators import BasePageLocators
 
 class OrderPage(BasePage):
-    
+
     def __init__(self, driver):
         super().__init__(driver)
 
@@ -46,7 +46,6 @@ class OrderPage(BasePage):
     def fill_date(self, date):
         self.fill_input(OrderPageLocators.DATE_PICKER, date)
         self.send_keys(OrderPageLocators.DATE_PICKER, Keys.ENTER)
-        
 
     @allure.step("Выбираем период аренды: {period}")
     def select_rental_period(self, period):
@@ -54,15 +53,10 @@ class OrderPage(BasePage):
         period_option = (By.XPATH, f"//div[text()='{period}']")
         self.click_when_clickable(period_option)
 
-    @allure.step("Выбираем цвет самоката: {color}")
-    def select_color(self, color):
-        if color == "black":
-            self.click_element(OrderPageLocators.BLACK_COLOR_CHECKBOX)
-        elif color == "grey":
-            self.click_element(OrderPageLocators.GREY_COLOR_CHECKBOX)
-        else:
-            raise ValueError(f"Unknown color: {color}")
-        
+    @allure.step("Выбираем цвет самоката")
+    def select_color(self, color_locator):
+        self.click_element(color_locator)
+
     @allure.step("Клик по кнопке 'Заказать'")
     def click_order_button(self):
         self.click_element(OrderPageLocators.ORDER_BUTTON)
@@ -75,11 +69,10 @@ class OrderPage(BasePage):
     def confirm_order(self):
         self.click_element(OrderPageLocators.YES_BUTTON)
 
-    @allure.step("Ожидаем появления сообщения об успешном оформлении заказа")
-    def wait_order_success_message(self):
-        message = self.wait_for_element_visible(OrderPageLocators.ORDER_SUCCESS_MESSAGE)
-        return message.text
-    
+    @allure.step("Находит элемент с сообщением об успешном оформлении заказа и возвращает его")
+    def find_order_success_message_element(self):
+        return self.wait_for_element_visible(OrderPageLocators.ORDER_SUCCESS_MESSAGE)
+
     @allure.step("Заполняем первую страницу заказа")
     def fill_first_page(self, first_name, last_name, address, metro_station, phone_number):
         self.fill_first_name(first_name)
@@ -89,7 +82,7 @@ class OrderPage(BasePage):
         self.fill_phone_number(phone_number)
 
     @allure.step("Заполняем вторую страницу заказа")
-    def fill_second_page(self, date, rental_period, color):
+    def fill_second_page(self, date, rental_period, color_locator): 
         self.fill_date(date)
         self.select_rental_period(rental_period)
-        self.select_color(color)
+        self.select_color(color_locator) 
