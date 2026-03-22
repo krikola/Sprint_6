@@ -65,11 +65,11 @@ class MainPage(BasePage):
     def get_current_url(self):
         return self.driver.current_url
 
-    @allure.step("Выбираем кнопку для оформления заказа - {button_type}")
+    @allure.step("Выбираем кнопку для оформления заказа — {button_type}")
     def select_order_button(self, button_type):
-        if button_type == "Пару балонов пивасика":
-            self.click_upper_order_button()
-        elif button_type == "Хочу выпить":
-            self.click_lower_order_button()
-        else:
-            raise ValueError(f"Неподдерживаемый тип кнопки: {button_type}")
+        button_actions = {
+            "lower": self.click_lower_order_button,
+            "upper": self.click_upper_order_button
+        }
+        button_actions.get(button_type)()
+        

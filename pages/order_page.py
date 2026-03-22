@@ -57,6 +57,10 @@ class OrderPage(BasePage):
     def select_color(self, color_locator):
         self.click_element(color_locator)
 
+    @allure.step("Оставляем комментарий для курьера")
+    def fill_comment_for_courier(self, comment):
+        self.fill_input(OrderPageLocators.COMMENT_FOR_COURIER, comment)
+
     @allure.step("Клик по кнопке 'Заказать'")
     def click_order_button(self):
         self.click_element(OrderPageLocators.ORDER_BUTTON)
@@ -82,7 +86,8 @@ class OrderPage(BasePage):
         self.fill_phone_number(phone_number)
 
     @allure.step("Заполняем вторую страницу заказа")
-    def fill_second_page(self, date, rental_period, color_locator): 
+    def fill_second_page(self, date, rental_period, color_locator, comment): 
         self.fill_date(date)
         self.select_rental_period(rental_period)
         self.select_color(color_locator) 
+        self.fill_comment_for_courier(comment)
